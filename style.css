@@ -45,8 +45,6 @@ display: inline;
 width: 90%;
 }
 
-.bildersatz {
-border: solid 10px;
-border-color: red;
-padding: 300px 100px 300px 100px;
+.bilder {
+position: center;  
 }
