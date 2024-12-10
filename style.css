@@ -45,6 +45,7 @@ display: inline;
 width: 90%;
 }
 
-.bilder {
+img {
 position: center;  
+width: 100%;  
 }
