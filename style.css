@@ -27,7 +27,7 @@ display: inline;
 list-style: none;
 padding: 4px 35px 4px 35px; 
 font-size: 38px;
-text-align: center; 
+position: center; 
 }
 
 body{
