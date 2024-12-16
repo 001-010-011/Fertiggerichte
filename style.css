@@ -36,6 +36,7 @@ background-color: white;
 
 p {
 font-size: 38px;
+padding: 0px, 5px, 0px, 5px;
 }
 
 .rezept {
@@ -45,6 +46,5 @@ width: 90%;
 }
 
 img {
-position: center;  
-width: 100%;  
+width: 50%;  
 }
