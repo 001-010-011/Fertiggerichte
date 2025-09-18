@@ -1,178 +1,62 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kalender von Arkana</title>
-  <style>
-    body {
-      font-family: 'Georgia', serif;
-      background: #f8f5f0;
-      margin: 0;
-      padding: 0;
-    }
-    h1.title {
-      font-family: 'Cursive', 'Brush Script MT', cursive;
-      text-align: center;
-      font-size: 3em;
-      color: #4b3c68;
-      margin-top: 100px;
-    }
-    h2 {
-      text-align: center;
-      color: #222;
-      border-bottom: 2px solid #ccc;
-      margin-top: 60px;
-    }
-    .year {
-      page-break-before: always;
-      padding: 20px;
-    }
-    .month {
-      margin: 30px 0;
-    }
-    .month h3 {
-      background-color: #ddd;
-      padding: 5px;
-    }
-    .day {
-      border-bottom: 1px solid #ccc;
-      padding: 5px 10px;
-    }
-    .note {
-      color: #555;
-      font-size: 0.9em;
-      margin-left: 10px;
-    }
-    .empty-days h4 {
-      margin-top: 30px;
-    }
-    .deckblatt {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-  </style>
-</head>
-<body>
+import matplotlib.pyplot as plt
+import pandas as pd
 
-<!-- Deckblatt -->
-<div class="deckblatt">
-  <h1 class="title">Per Tempus, Per Magiam</h1>
-  <h2>Der Kalender der Zeitwächter von Arkana</h2>
-</div>
+# Daten
+data = {
+    "Allergie-Typ": [
+        "Pollenallergie (Heuschnupfen)",
+        "Hausstaubmilbenallergie",
+        "Tierhaarallergie",
+        "Nahrungsmittelallergie",
+        "Insektengiftallergie",
+        "Allergisches Asthma",
+        "Chronische Urtikaria",
+        "Kontaktallergie (z. B. Nickel)"
+    ],
+    "Verlauf": [
+        "Saisonal, wiederkehrend",
+        "Ganzjährig",
+        "Bei dauerhaftem Kontakt",
+        "Meist dauerhaft",
+        "Nur bei Stich",
+        "Langfristig, belastungsabhängig",
+        "Häufig über ≥6 Wochen",
+        "Wiederkehrend bei Kontakt"
+    ],
+    "Chronisch?": [
+        "❌ Nein",
+        "✅ Ja",
+        "✅ Ja",
+        "✅ Ja",
+        "❌ Nein",
+        "✅ Ja",
+        "✅ Ja",
+        "✅/❌ Je nach Kontakt"
+    ]
+}
 
-<!-- Kalenderdaten -->
-<script>
-  const monate = [
-    "Sturmmond", "Frostlicht", "Erwachtmond", "Blütenzirkel",
-    "Goldblatt", "Hitzemond", "Dunstfall", "Nebelklang", "Feuersaat", "Schattenschluss"
-  ];
+# DataFrame erstellen
+df = pd.DataFrame(data)
 
-  const feiertage = {
-    "1. Sturmmond": "Wiederkehr",
-    "18. Erwachtmond": "Erwachen",
-    "36. Blütenzirkel": "Glanzwende",
-    "18. Dunstfall": "Stillstand",
-    "18. Feuersaat": "Erntelied",
-    "12. Schattenschluss": "Schattentanz"
-  };
+# Grafikgröße
+fig, ax = plt.subplots(figsize=(12, 6))
 
-  const leereTage = [
-    "Tag des Lichts",
-    "Tag der Stimmen",
-    "Tag des Schattens",
-    "Tag des Pfades",
-    "Tag der Öffnung"
-  ];
+# Tabelle einfügen
+ax.axis("off")
+table = ax.table(
+    cellText=df.values,
+    colLabels=df.columns,
+    cellLoc="center",
+    loc="center"
+)
 
-  const jahrgangstermine = {
-    1: {
-      "7. Frostlicht": "Schulbeginn",
-      "1. Feuersaat": "Große Prüfungen Beginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "1. Sturmmond": "Einladung zur Aufnahmeprüfung",
-      "15. Sturmmond": "Aufnahmeprüfung",
-      "16. Sturmmond": "Aufnahmeprüfung",
-      "17. Sturmmond": "Aufnahmeprüfung",
-      "18. Sturmmond": "Ergebnisse",
-      "6. Frostlicht": "Aufnahmefeier"
-    },
-    2: {
-      "7. Frostlicht": "Schulbeginn",
-      "1. Feuersaat": "Große Prüfungen Beginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "6. Frostlicht": "Anreise zum Schuljahr"
-    },
-    3: {
-      "7. Frostlicht": "Schulbeginn",
-      "1. Feuersaat": "Große Prüfungen Beginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "6. Frostlicht": "Anreise zum Schuljahr"
-    },
-    4: {
-      "7. Frostlicht": "Schulbeginn",
-      "1. Feuersaat": "Große Prüfungen Beginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "6. Frostlicht": "Anreise zum Schuljahr"
-    },
-    5: {
-      "7. Frostlicht": "Schulbeginn",
-      "1. Feuersaat": "Große Prüfungen Beginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "6. Frostlicht": "Anreise zum Schuljahr",
-      "1. Goldblatt": "Prüfung der Zeitlinie"
-    },
-    6: {
-      "7. Frostlicht": "Schulbeginn",
-      "36. Schattenschluss": "Schuljahresende",
-      "6. Frostlicht": "Anreise zum Schuljahr",
-      "1. Goldblatt": "Prüfung der Zeitlinie",
-      "1. Hitzemond": "Wandeljahr Beginn",
-      
-    }
-  };
+# Formatierung
+table.auto_set_font_size(False)
+table.set_fontsize(11)
+table.scale(1.2, 1.5)
 
-  for (let jahr = 1; jahr <= 6; jahr++) {
-    document.write(`<div class="year"><h2>Jahr ${jahr}</h2>`);
-    monate.forEach(monat => {
-      document.write(`<div class="month"><h3>${monat}</h3>`);
-      for (let tag = 1; tag <= 36; tag++) {
-        let datum = `${tag}. ${monat}`;
-        let notiz = "";
+# Titel
+plt.title("Allergien und chronischer Verlauf – Übersicht", fontsize=14, weight='bold', pad=20)
 
-        // Feiertage
-        if (feiertage[datum]) {
-          notiz += `🎉 ${feiertage[datum]}`;
-        }
-
-        // Jahrgangspezifische Termine
-        if (jahrgangstermine[jahr]) {
-          for (let key in jahrgangstermine[jahr]) {
-            if (key.includes(monat) && key.startsWith(`${tag}.`)) {
-              notiz += ` 📘 ${jahrgangstermine[jahr][key]}`;
-            } else if (key.includes(monat) && key.includes("–")) {
-              const [von, bis] = key.split("–");
-              if (monat === von.split(". ")[1]) {
-                notiz += ` 📘 ${jahrgangstermine[jahr][key]}`;
-              }
-            }
-          }
-        }
-
-        document.write(`<div class="day">${datum}<span class="note">${notiz}</span><br><em>Notizen: __________________________________________</em></div>`);
-      }
-      document.write("</div>");
-    });
-
-    document.write(`<div class="empty-days"><h3>Die Leeren Tage</h3>`);
-    leereTage.forEach(tag => {
-      document.write(`<div class="day">${tag}<br><em>Notizen: __________________________________________</em></div>`);
-    });
-    document.write("</div></div>");
-  }
-</script>
-
-</body>
-</html>
+plt.tight_layout()
+plt.show()
